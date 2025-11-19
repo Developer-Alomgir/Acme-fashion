@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jupiter Fashion House - Modern E-commerce</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: #000;
+            border-bottom: 1px solid #222;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            gap: 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #4a90e2, #e24a90);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.75rem 3rem 0.75rem 1rem;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: #111;
+            border: 1px solid #333;
+            padding: 0.75rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn:hover {
+            background: #222;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #4a90e2;
+            color: #fff;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #999;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4a90e2, #e24a90);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-switch {
+            text-align: center;
+            margin-top: 1rem;
+            color: #999;
+        }
+
+        .modal-switch a {
+            color: #4a90e2;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* Profile Dropdown */
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            min-width: 200px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .profile-menu.active {
+            display: block;
+        }
+
+        .profile-menu-item {
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #222;
+            transition: background 0.3s;
+        }
+
+        .profile-menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-menu-item:hover {
+            background: #222;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            min-height: 500px;
+        }
+
+        .hero-main {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .hero-main:hover {
+            transform: scale(1.02);
+        }
+
+        .hero-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-badge {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-badge-text {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .hero-badge-price {
+            background: #4a90e2;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .hero-side {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+            flex: 1;
+        }
+
+        .hero-card:hover {
+            transform: scale(1.05);
+        }
+
+        .hero-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-card-badge {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-card-text {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .hero-card-price {
+            background: #4a90e2;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        /* Scrolling Banner */
+        .scroll-banner-section {
+            margin: 3rem 0;
+            overflow: hidden;
+        }
+
+        .scroll-banner {
+            display: flex;
+            white-space: nowrap;
+            animation: scrollLeft 15s linear infinite;
+            padding: 1.5rem 0;
+        }
+
+        .scroll-banner.reverse {
+            animation: scrollRight 15s linear infinite;
+        }
+
+        .scroll-banner:hover {
+            animation-play-state: paused;
+        }
+
+        .scroll-item {
+            padding: 1rem 2rem;
+            margin: 0 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #4a90e2, #e24a90, #90e24a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border: 2px solid #333;
+            border-radius: 12px;
+        }
+
+        @keyframes scrollLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes scrollRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* 3D Product Cards */
+        .card-3d-section {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(90deg, #4a90e2, #e24a90);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-3d-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .card-3d {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .card-3d:hover {
+            transform: scale(1.05);
+        }
+
+        .card-3d-content {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        .card-3d.blue { background: linear-gradient(135deg, #4a90e2, #2a70c2); }
+        .card-3d.pink { background: linear-gradient(135deg, #e24a90, #c22a70); }
+        .card-3d.green { background: linear-gradient(135deg, #90e24a, #70c22a); }
+        .card-3d.purple { background: linear-gradient(135deg, #904ae2, #702ac2); }
+        .card-3d.orange { background: linear-gradient(135deg, #e2904a, #c2702a); }
+
+        .card-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 2;
+            font-size: 0.85rem;
+        }
+
+        .card-3d-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+
+        .card-3d:hover .card-3d-img {
+            transform: scale(1.1);
+        }
+
+        .card-3d-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .card-3d-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .card-3d-btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .card-3d.blue .card-3d-btn { background: #4a90e2; color: #fff; }
+        .card-3d.pink .card-3d-btn { background: #e24a90; color: #fff; }
+        .card-3d.green .card-3d-btn { background: #90e24a; color: #000; }
+        .card-3d.purple .card-3d-btn { background: #904ae2; color: #fff; }
+        .card-3d.orange .card-3d-btn { background: #e2904a; color: #fff; }
+
+        .card-3d-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Scrolling Products */
+        .products-section {
+            margin: 4rem 0;
+        }
+
+        .product-row {
+            display: flex;
+            overflow: hidden;
+            padding: 2rem 0;
+            gap: 2rem;
+        }
+
+        .product-row-content {
+            display: flex;
+            gap: 2rem;
+            animation: scrollProductLeft 20s linear infinite;
+        }
+
+        .product-row:nth-child(2) .product-row-content {
+            animation: scrollProductRight 20s linear infinite;
+        }
+
+        .product-row:nth-child(3) .product-row-content {
+            animation: scrollProductLeft 15s linear infinite;
+        }
+
+        .product-row-content:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollProductLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes scrollProductRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        .product-card {
+            min-width: 300px;
+            background: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border: 2px solid #222;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+            border-color: #4a90e2;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .product-price {
+            background: #4a90e2;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* Orders Page */
+        .orders-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #4a90e2, #e24a90);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .orders-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .order-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.3s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            border-color: #4a90e2;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .order-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        .order-status.processing { background: #e2904a; }
+        .order-status.shipped { background: #4a90e2; }
+        .order-status.delivered { background: #90e24a; color: #000; }
+
+        .order-items {
+            margin-bottom: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #222;
+        }
+
+        .order-total {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .track-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #4a90e2, #e24a90);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .track-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Tracking Timeline */
+        .tracking-timeline {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #0a0a0a;
+            border-radius: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            width: 2px;
+            height: calc(100% + 2rem);
+            background: #333;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-icon {
+            width: 32px;
+            height: 32px;
+            background: #4a90e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .timeline-icon.completed {
+            background: #90e24a;
+            color: #000;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-date {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        /* Profile Panel */
+        .profile-panel {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .profile-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #222;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4a90e2, #e24a90);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .profile-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+
+        .profile-section h3 {
+            margin-bottom: 1rem;
+            color: #4a90e2;
+        }
+
+        .profile-field {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .profile-field:last-child {
+            border-bottom: none;
+        }
+
+        .profile-label {
+            color: #999;
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            padding: 3rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section a {
+            display: block;
+            color: #999;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #222;
+            color: #666;
+        }
+
+        .footer-credit {
+            margin-top: 1rem;
+            font-weight: bold;
+            background: linear-gradient(90deg, #4a90e2, #e24a90);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .card-3d-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-card {
+                min-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">J</div>
+                <span>Jupiter Fashion House</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('orders')">Orders</a></li>
+                <li><a href="#clothing">Clothing</a></li>
+                <li><a href="#shop">Shop All</a></li>
+            </ul>
+            <div class="search-container">
+                <input type="text" placeholder="Search for products...">
+            </div>
+            <div class="nav-icons">
+                <div class="nav-btn" onclick="toggleCart()" style="position: relative;">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+                    <div class="nav-btn" onclick="toggleProfileMenu()">
+                        <span id="userInitial">U</span>
+                    </div>
+                    <div class="profile-menu" id="profileMenu">
+                        <div class="profile-menu-item" onclick="showPage('profile')">My Profile</div>
+                        <div class="profile-menu-item" onclick="showPage('orders')">My Orders</div>
+                        <div class="profile-menu-item" onclick="logout()">Logout</div>
+                    </div>
+                </div>
+                <button class="nav-btn" id="loginBtn" onclick="showLogin()">Login</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Login/Signup Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="authTitle">Login</h2>
+            <form id="authForm">
+                <div class="form-group" id="nameGroup" style="display: none;">
+                    <label>Full Name</label>
+                    <input type="text" id="nameInput" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="emailInput" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="passwordInput" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary" id="authSubmitBtn">Login</button>
+            </form>
+            <div class="modal-switch">
+                <span id="switchText">Don't have an account? </span>
+                <a id="switchLink" onclick="toggleAuthMode()">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div class="page active" id="homePage">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-main" onclick="addToCart('Lightweight Jacket', 249.99)">
+                <img src="data:image/svg+xml,%3Csvg width='800' height='600' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='800' height='600' fill='%231a1a1a'/%3E%3Ctext x='400' y='300' font-size='40' fill='%23fff' text-anchor='middle' font-family='Arial'%3ELightweight Jacket%3C/text%3E%3C/svg%3E" alt="Lightweight Jacket">
+                <div class="hero-badge">
+                    <span class="hero-badge-text">Lightweight Jacket</span>
+                    <span class="hero-badge-price">$249.99 USD</span>
+                </div>
+            </div>
+            <div class="hero-side">
+                <div class="hero-card" onclick="addToCart('Next.js Joggers', 54.00)">
+                    <img src="data:image/svg+xml,%3Csvg width='400' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='400' height='300' fill='%232a2a2a'/%3E%3Ctext x='200' y='150' font-size='30' fill='%23fff' text-anchor='middle' font-family='Arial'%3EJoggers%3C/text%3E%3C/svg%3E" alt="Joggers">
+                    <div class="hero-card-badge">
+                        <span class="hero-card-text">Next.js Joggers</span>
+                        <span class="hero-card-price">$54.00 USD</span>
+                    </div>
+                </div>
+                <div class="hero-card" onclick="addToCart('Purple Jacket', 500.00)">
+                    <img src="data:image/svg+xml,%3Csvg width='400' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='400' height='300' fill='%23904ae2'/%3E%3Ctext x='200' y='150' font-size='30' fill='%23fff' text-anchor='middle' font-family='Arial'%3EPurple Jacket%3C/text%3E%3C/svg%3E" alt="Purple Jacket">
+                    <div class="hero-card-badge">
+                        <span class="hero-card-text">Purple Irradiated Jacket</span>
+                        <span class="hero-card-price">$500.00 USD</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scrolling Banners -->
+        <div class="scroll-banner-section">
+            <div class="scroll-banner">
+                <span class="scroll-item">🔥 HUGE SALE - UP TO 50% OFF</span>
+                <span class="scroll-item">✨ NEW ARRIVALS DAILY</span>
+                <span class="scroll-item">🚚 FREE SHIPPING WORLDWIDE</span>
+                <span class="scroll-item">💎 PREMIUM QUALITY</span>
+                <span class="scroll-item">⭐ RATED 5/5 STARS</span>
+                <span class="scroll-item">🔥 HUGE SALE - UP TO 50% OFF</span>
+                <span class="scroll-item">✨ NEW ARRIVALS DAILY</span>
+                <span class="scroll-item">🚚 FREE SHIPPING WORLDWIDE</span>
+                <span class="scroll-item">💎 PREMIUM QUALITY</span>
+                <span class="scroll-item">⭐ RATED 5/5 STARS</span>
+            </div>
+            <div class="scroll-banner reverse">
+                <span class="scroll-item">JACKETS</span>
+                <span class="scroll-item">JOGGERS</span>
+                <span class="scroll-item">HOODIES</span>
+                <span class="scroll-item">T-SHIRTS</span>
+                <span class="scroll-item">ACCESSORIES</span>
+                <span class="scroll-item">BAGS</span>
+                <span class="scroll-item">JACKETS</span>
+                <span class="scroll-item">JOGGERS</span>
+                <span class="scroll-item">HOODIES</span>
+                <span class="scroll-item">T-SHIRTS</span>
+                <span class="scroll-item">ACCESSORIES</span>
+                <span class="scroll-item">BAGS</span>
+            </div>
+        </div>
+
+        <!-- 3D Product Cards -->
+        <section class="card-3d-section">
+            <h2 class="section-title">Featured Collection</h2>
+            <div class="card-3d-grid">
+                <div class="card-3d blue" onclick="addToCart('Tech Jacket', 349.99)">
+                    <div class="card-status">SALE</div>
+                    <div class="card-3d-content">
+                        <img class="card-3d-img" src="data:image/svg+xml,%3Csvg width='300' height='250' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='250' fill='%234a90e2'/%3E%3Ctext x='150' y='125' font-size='24' fill='%23fff' text-anchor='middle' font-family='Arial'%3ETech Jacket%3C/text%3E%3C/svg%3E" alt="Tech Jacket">
+                        <div class="card-3d-title">Tech Jacket</div>
+                        <div class="card-3d-price">$349.99</div>
+                        <button class="card-3d-btn">Add to Cart</button>
+                    </div>
+                </div>
+                
+                <div class="card-3d pink" onclick="addToCart('Sport Hoodie', 89.99)">
+                    <div class="card-status">NEW</div>
+                    <div class="card-3d-content">
+                        <img class="card-3d-img" src="data:image/svg+xml,%3Csvg width='300' height='250' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='250' fill='%23e24a90'/%3E%3Ctext x='150' y='125' font-size='24' fill='%23fff' text-anchor='middle' font-family='Arial'%3ESport Hoodie%3C/text%3E%3C/svg%3E" alt="Sport Hoodie">
+                        <div class="card-3d-title">Sport Hoodie</div>
+                        <div class="card-3d-price">$89.99</div>
+                        <button class="card-3d-btn">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="card-3d green" onclick="addToCart('Urban Joggers', 74.99)">
+                    <div class="card-status">HOT</div>
+                    <div class="card-3d-content">
+                        <img class="card-3d-img" src="data:image/svg+xml,%3Csvg width='300' height='250' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='250' fill='%2390e24a'/%3E%3Ctext x='150' y='125' font-size='24' fill='%23000' text-anchor='middle' font-family='Arial'%3EUrban Joggers%3C/text%3E%3C/svg%3E" alt="Urban Joggers">
+                        <div class="card-3d-title">Urban Joggers</div>
+                        <div class="card-3d-price">$74.99</div>
+                        <button class="card-3d-btn">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="card-3d purple" onclick="addToCart('Premium Tee', 49.99)">
+                    <div class="card-status">-20%</div>
+                    <div class="card-3d-content">
+                        <img class="card-3d-img" src="data:image/svg+xml,%3Csvg width='300' height='250' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='250' fill='%23904ae2'/%3E%3Ctext x='150' y='125' font-size='24' fill='%23fff' text-anchor='middle' font-family='Arial'%3EPremium Tee%3C/text%3E%3C/svg%3E" alt="Premium Tee">
+                        <div class="card-3d-title">Premium Tee</div>
+                        <div class="card-3d-price">$49.99</div>
+                        <button class="card-3d-btn">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="card-3d orange" onclick="addToCart('Street Backpack', 129.99)">
+                    <div class="card-status">TOP</div>
+                    <div class="card-3d-content">
+                        <img class="card-3d-img" src="data:image/svg+xml,%3Csvg width='300' height='250' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='250' fill='%23e2904a'/%3E%3Ctext x='150' y='125' font-size='24' fill='%23fff' text-anchor='middle' font-family='Arial'%3EBackpack%3C/text%3E%3C/svg%3E" alt="Backpack">
+                        <div class="card-3d-title">Street Backpack</div>
+                        <div class="card-3d-price">$129.99</div>
+                        <button class="card-3d-btn">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scrolling Products -->
+        <section class="products-section">
+            <!-- Row 1 -->
+            <div class="product-row">
+                <div class="product-row-content">
+                    <div class="product-card" onclick="addToCart('Classic Tee', 29.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23333'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EClassic Tee%3C/text%3E%3C/svg%3E" alt="Classic Tee">
+                        <div class="product-info">
+                            <div class="product-name">Classic Tee</div>
+                            <div class="product-price">$29.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Denim Jacket', 189.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%234a5568'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EDenim Jacket%3C/text%3E%3C/svg%3E" alt="Denim Jacket">
+                        <div class="product-info">
+                            <div class="product-name">Denim Jacket</div>
+                            <div class="product-price">$189.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Cargo Pants', 99.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%235a4a3a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ECargo Pants%3C/text%3E%3C/svg%3E" alt="Cargo Pants">
+                        <div class="product-info">
+                            <div class="product-name">Cargo Pants</div>
+                            <div class="product-price">$99.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Sneakers Pro', 149.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23e24a90'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ESneakers Pro%3C/text%3E%3C/svg%3E" alt="Sneakers">
+                        <div class="product-info">
+                            <div class="product-name">Sneakers Pro</div>
+                            <div class="product-price">$149.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Baseball Cap', 34.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%234a90e2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EBaseball Cap%3C/text%3E%3C/svg%3E" alt="Baseball Cap">
+                        <div class="product-info">
+                            <div class="product-name">Baseball Cap</div>
+                            <div class="product-price">$34.99 USD</div>
+                        </div>
+                    </div>
+                    <!-- Duplicates -->
+                    <div class="product-card" onclick="addToCart('Classic Tee', 29.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23333'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EClassic Tee%3C/text%3E%3C/svg%3E" alt="Classic Tee">
+                        <div class="product-info">
+                            <div class="product-name">Classic Tee</div>
+                            <div class="product-price">$29.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Denim Jacket', 189.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%234a5568'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EDenim Jacket%3C/text%3E%3C/svg%3E" alt="Denim Jacket">
+                        <div class="product-info">
+                            <div class="product-name">Denim Jacket</div>
+                            <div class="product-price">$189.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Cargo Pants', 99.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%235a4a3a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ECargo Pants%3C/text%3E%3C/svg%3E" alt="Cargo Pants">
+                        <div class="product-info">
+                            <div class="product-name">Cargo Pants</div>
+                            <div class="product-price">$99.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Sneakers Pro', 149.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23e24a90'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ESneakers Pro%3C/text%3E%3C/svg%3E" alt="Sneakers">
+                        <div class="product-info">
+                            <div class="product-name">Sneakers Pro</div>
+                            <div class="product-price">$149.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Baseball Cap', 34.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%234a90e2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EBaseball Cap%3C/text%3E%3C/svg%3E" alt="Baseball Cap">
+                        <div class="product-info">
+                            <div class="product-name">Baseball Cap</div>
+                            <div class="product-price">$34.99 USD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="product-row">
+                <div class="product-row-content">
+                    <div class="product-card" onclick="addToCart('Winter Coat', 299.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23904ae2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EWinter Coat%3C/text%3E%3C/svg%3E" alt="Winter Coat">
+                        <div class="product-info">
+                            <div class="product-name">Winter Coat</div>
+                            <div class="product-price">$299.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Gym Shorts', 44.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%2390e24a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23000' text-anchor='middle' font-family='Arial'%3EGym Shorts%3C/text%3E%3C/svg%3E" alt="Gym Shorts">
+                        <div class="product-info">
+                            <div class="product-name">Gym Shorts</div>
+                            <div class="product-price">$44.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Leather Boots', 219.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23654321'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ELeather Boots%3C/text%3E%3C/svg%3E" alt="Leather Boots">
+                        <div class="product-info">
+                            <div class="product-name">Leather Boots</div>
+                            <div class="product-price">$219.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Sunglasses', 79.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23e2904a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ESunglasses%3C/text%3E%3C/svg%3E" alt="Sunglasses">
+                        <div class="product-info">
+                            <div class="product-name">Sunglasses</div>
+                            <div class="product-price">$79.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Crossbody Bag', 89.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%234a90e2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ECrossbody Bag%3C/text%3E%3C/svg%3E" alt="Crossbody Bag">
+                        <div class="product-info">
+                            <div class="product-name">Crossbody Bag</div>
+                            <div class="product-price">$89.99 USD</div>
+                        </div>
+                    </div>
+                    <!-- Duplicates -->
+                    <div class="product-card" onclick="addToCart('Winter Coat', 299.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23904ae2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EWinter Coat%3C/text%3E%3C/svg%3E" alt="Winter Coat">
+                        <div class="product-info">
+                            <div class="product-name">Winter Coat</div>
+                            <div class="product-price">$299.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Gym Shorts', 44.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%2390e24a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23000' text-anchor='middle' font-family='Arial'%3EGym Shorts%3C/text%3E%3C/svg%3E" alt="Gym Shorts">
+                        <div class="product-info">
+                            <div class="product-name">Gym Shorts</div>
+                            <div class="product-price">$44.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Leather Boots', 219.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23654321'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ELeather Boots%3C/text%3E%3C/svg%3E" alt="Leather Boots">
+                        <div class="product-info">
+                            <div class="product-name">Leather Boots</div>
+                            <div class="product-price">$219.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Sunglasses', 79.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23e2904a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ESunglasses%3C/text%3E%3C/svg%3E" alt="Sunglasses">
+                        <div class="product-info">
+                            <div class="product-name">Sunglasses</div>
+                            <div class="product-price">$79.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Crossbody Bag', 89.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%234a90e2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ECrossbody Bag%3C/text%3E%3C/svg%3E" alt="Crossbody Bag">
+                        <div class="product-info">
+                            <div class="product-name">Crossbody Bag</div>
+                            <div class="product-price">$89.99 USD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="product-row">
+                <div class="product-row-content">
+                    <div class="product-card" onclick="addToCart('Track Suit', 159.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23e24a90'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ETrack Suit%3C/text%3E%3C/svg%3E" alt="Track Suit">
+                        <div class="product-info">
+                            <div class="product-name">Track Suit</div>
+                            <div class="product-price">$159.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Fleece Hoodie', 69.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23555'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EFleece Hoodie%3C/text%3E%3C/svg%3E" alt="Fleece Hoodie">
+                        <div class="product-info">
+                            <div class="product-name">Fleece Hoodie</div>
+                            <div class="product-price">$69.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Beanie Hat', 24.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23904ae2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EBeanie Hat%3C/text%3E%3C/svg%3E" alt="Beanie Hat">
+                        <div class="product-info">
+                            <div class="product-name">Beanie Hat</div>
+                            <div class="product-price">$24.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Slim Fit Jeans', 119.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%2340506a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ESlim Jeans%3C/text%3E%3C/svg%3E" alt="Slim Fit Jeans">
+                        <div class="product-info">
+                            <div class="product-name">Slim Fit Jeans</div>
+                            <div class="product-price">$119.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Messenger Bag', 139.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23654321'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EMessenger Bag%3C/text%3E%3C/svg%3E" alt="Messenger Bag">
+                        <div class="product-info">
+                            <div class="product-name">Messenger Bag</div>
+                            <div class="product-price">$139.99 USD</div>
+                        </div>
+                    </div>
+                    <!-- Duplicates -->
+                    <div class="product-card" onclick="addToCart('Track Suit', 159.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23e24a90'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ETrack Suit%3C/text%3E%3C/svg%3E" alt="Track Suit">
+                        <div class="product-info">
+                            <div class="product-name">Track Suit</div>
+                            <div class="product-price">$159.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Fleece Hoodie', 69.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23555'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EFleece Hoodie%3C/text%3E%3C/svg%3E" alt="Fleece Hoodie">
+                        <div class="product-info">
+                            <div class="product-name">Fleece Hoodie</div>
+                            <div class="product-price">$69.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Beanie Hat', 24.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23904ae2'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EBeanie Hat%3C/text%3E%3C/svg%3E" alt="Beanie Hat">
+                        <div class="product-info">
+                            <div class="product-name">Beanie Hat</div>
+                            <div class="product-price">$24.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Slim Fit Jeans', 119.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%2340506a'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3ESlim Jeans%3C/text%3E%3C/svg%3E" alt="Slim Fit Jeans">
+                        <div class="product-info">
+                            <div class="product-name">Slim Fit Jeans</div>
+                            <div class="product-price">$119.99 USD</div>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="addToCart('Messenger Bag', 139.99)">
+                        <img class="product-img" src="data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='300' fill='%23654321'/%3E%3Ctext x='150' y='150' font-size='20' fill='%23fff' text-anchor='middle' font-family='Arial'%3EMessenger Bag%3C/text%3E%3C/svg%3E" alt="Messenger Bag">
+                        <div class="product-info">
+                            <div class="product-name">Messenger Bag</div>
+                            <div class="product-price">$139.99 USD</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Orders & Tracking Page -->
+    <div class="page" id="ordersPage">
+        <div class="orders-container">
+            <div class="page-header">
+                <h1>My Orders & Tracking</h1>
+                <p style="color: #999;">Track your orders and view order history</p>
+            </div>
+
+            <div class="orders-grid">
+                <!-- Order 1 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #JFH-2024-1001</div>
+                            <div style="color: #999; font-size: 0.9rem; margin-top: 0.25rem;">Placed on Nov 15, 2024</div>
+                        </div>
+                        <div class="order-status shipped">Shipped</div>
+                    </div>
+
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div>
+                                <div style="font-weight: 600;">Tech Jacket</div>
+                                <div style="color: #999; font-size: 0.9rem;">Quantity: 1</div>
+                            </div>
+                            <div style="font-weight: bold;">$349.99</div>
+                        </div>
+                        <div class="order-item">
+                            <div>
+                                <div style="font-weight: 600;">Urban Joggers</div>
+                                <div style="color: #999; font-size: 0.9rem;">Quantity: 2</div>
+                            </div>
+                            <div style="font-weight: bold;">$149.98</div>
+                        </div>
+                    </div>
+
+                    <div class="tracking-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Order Placed</div>
+                                <div class="timeline-date">Nov 15, 2024 - 10:30 AM</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Payment Confirmed</div>
+                                <div class="timeline-date">Nov 15, 2024 - 10:32 AM</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Order Processed</div>
+                                <div class="timeline-date">Nov 16, 2024 - 9:15 AM</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Shipped</div>
+                                <div class="timeline-date">Nov 17, 2024 - 2:45 PM</div>
+                                <div style="color: #4a90e2; margin-top: 0.5rem;">Tracking: JFHTRK-8492037</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">📦</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Out for Delivery</div>
+                                <div class="timeline-date">Expected: Nov 20, 2024</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-total">Total: $499.97</div>
+                        <button class="track-btn" onclick="alert('Tracking ID: JFHTRK-8492037\nCarrier: FastShip Express\nStatus: In Transit')">Track Package</button>
+                    </div>
+                </div>
+
+                <!-- Order 2 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #JFH-2024-0987</div>
+                            <div style="color: #999; font-size: 0.9rem; margin-top: 0.25rem;">Placed on Nov 10, 2024</div>
+                        </div>
+                        <div class="order-status delivered">Delivered</div>
+                    </div>
+
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div>
+                                <div style="font-weight: 600;">Sport Hoodie</div>
+                                <div style="color: #999; font-size: 0.9rem;">Quantity: 1</div>
+                            </div>
+                            <div style="font-weight: bold;">$89.99</div>
+                        </div>
+                        <div class="order-item">
+                            <div>
+                                <div style="font-weight: 600;">Baseball Cap</div>
+                                <div style="color: #999; font-size: 0.9rem;">Quantity: 1</div>
+                            </div>
+                            <div style="font-weight: bold;">$34.99</div>
+                        </div>
+                    </div>
+
+                    <div class="tracking-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Order Placed</div>
+                                <div class="timeline-date">Nov 10, 2024 - 3:20 PM</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Shipped</div>
+                                <div class="timeline-date">Nov 11, 2024 - 11:00 AM</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Delivered</div>
+                                <div class="timeline-date">Nov 13, 2024 - 4:30 PM</div>
+                                <div style="color: #90e24a; margin-top: 0.5rem;">Package delivered successfully</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-total">Total: $124.98</div>
+                        <button class="track-btn" onclick="alert('Order delivered on Nov 13, 2024')">View Details</button>
+                    </div>
+                </div>
+
+                <!-- Order 3 -->
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #JFH-2024-0956</div>
+                            <div style="color: #999; font-size: 0.9rem; margin-top: 0.25rem;">Placed on Nov 18, 2024</div>
+                        </div>
+                        <div class="order-status processing">Processing</div>
+                    </div>
+
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div>
+                                <div style="font-weight: 600;">Premium Tee</div>
+                                <div style="color: #999; font-size: 0.9rem;">Quantity: 3</div>
+                            </div>
+                            <div style="font-weight: bold;">$149.97</div>
+                        </div>
+                        <div class="order-item">
+                            <div>
+                                <div style="font-weight: 600;">Street Backpack</div>
+                                <div style="color: #999; font-size: 0.9rem;">Quantity: 1</div>
+                            </div>
+                            <div style="font-weight: bold;">$129.99</div>
+                        </div>
+                    </div>
+
+                    <div class="tracking-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Order Placed</div>
+                                <div class="timeline-date">Nov 18, 2024 - 8:45 AM</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon completed">✓</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Payment Confirmed</div>
+                                <div class="timeline-date">Nov 18, 2024 - 8:47 AM</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-icon">⏳</div>
+                            <div class="timeline-content">
+                                <div class="timeline-title">Processing</div>
+                                <div class="timeline-date">Expected ship date: Nov 21, 2024</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-footer">
+                        <div class="order-total">Total: $279.96</div>
+                        <button class="track-btn" onclick="alert('Order is being processed. You will receive tracking info once shipped.')">Check Status</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div class="page" id="profilePage">
+        <div class="profile-panel">
+            <div class="page-header">
+                <h1>My Profile</h1>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">U</div>
+                    <div class="profile-info">
+                        <h2 id="profileName">User Name</h2>
+                        <p style="color: #999;" id="profileEmail">user@example.com</p>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Account Information</h3>
+                    <div class="profile-field">
+                        <span class="profile-label">Member Since</span>
+                        <span>November 2024</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="profile-label">Account Status</span>
+                        <span style="color: #90e24a;">Active</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="profile-label">Total Orders</span>
+                        <span>3 Orders</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Shipping Address</h3>
+                    <div class="profile-field">
+                        <span class="profile-label">Address</span>
+                        <span>123 Fashion Street</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="profile-label">City</span>
+                        <span>New York, NY 10001</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="profile-label">Country</span>
+                        <span>United States</span>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Preferences</h3>
+                    <div class="profile-field">
+                        <span class="profile-label">Newsletter</span>
+                        <span style="color: #4a90e2;">Subscribed</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="profile-label">Notifications</span>
+                        <span style="color: #4a90e2;">Enabled</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary" style="margin-top: 2rem;" onclick="alert('Profile edit feature coming soon!')">Edit Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="scroll-banner-section">
+            <div class="scroll-banner">
+                <span class="scroll-item">🎉 JOIN OUR NEWSLETTER</span>
+                <span class="scroll-item">💳 SECURE PAYMENTS</span>
+                <span class="scroll-item">🌍 WORLDWIDE DELIVERY</span>
+                <span class="scroll-item">♻️ ECO-FRIENDLY PACKAGING</span>
+                <span class="scroll-item">⚡ FAST CHECKOUT</span>
+                <span class="scroll-item">🎉 JOIN OUR NEWSLETTER</span>
+                <span class="scroll-item">💳 SECURE PAYMENTS</span>
+                <span class="scroll-item">🌍 WORLDWIDE DELIVERY</span>
+                <span class="scroll-item">♻️ ECO-FRIENDLY PACKAGING</span>
+                <span class="scroll-item">⚡ FAST CHECKOUT</span>
+            </div>
+            <div class="scroll-banner reverse">
+                <span class="scroll-item">WINTER COLLECTION</span>
+                <span class="scroll-item">SUMMER SALE</span>
+                <span class="scroll-item">NEW ARRIVALS</span>
+                <span class="scroll-item">BEST SELLERS</span>
+                <span class="scroll-item">PREMIUM GEAR</span>
+                <span class="scroll-item">WINTER COLLECTION</span>
+                <span class="scroll-item">SUMMER SALE</span>
+                <span class="scroll-item">NEW ARRIVALS</span>
+                <span class="scroll-item">BEST SELLERS</span>
+                <span class="scroll-item">PREMIUM GEAR</span>
+            </div>
+        </div>
+
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Shop</h3>
+                <a href="#">All Products</a>
+                <a href="#">New Arrivals</a>
+                <a href="#">Best Sellers</a>
+                <a href="#">Sale</a>
+            </div>
+            <div class="footer-section">
+                <h3>Company</h3>
+                <a href="#">About Us</a>
+                <a href="#">Careers</a>
+                <a href="#">Blog</a>
+                <a href="#">Press</a>
+            </div>
+            <div class="footer-section">
+                <h3>Support</h3>
+                <a href="#">Contact Us</a>
+                <a href="#">Shipping & Returns</a>
+                <a href="#">Size Guide</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="footer-section">
+                <h3>Social</h3>
+                <a href="#">Instagram</a>
+                <a href="#">Twitter</a>
+                <a href="#">Facebook</a>
+                <a href="#">YouTube</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023-2025 Jupiter Fashion House. All rights reserved.</p>
+            <p class="footer-credit">Crafted by ALOMGIR HOSSEN</p>
+        </div>
+    </footer>
+
+    <script>
+        let cartCount = 0;
+        let isLoggedIn = false;
+        let isSignupMode = false;
+        let currentUser = null;
+
+        function addToCart(productName, price) {
+            cartCount++;
+            document.getElementById('cartCount').textContent = cartCount;
+            
+            const cartIcon = document.querySelector('.cart-icon');
+            if (cartIcon) {
+                cartIcon.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    cartIcon.style.transform = 'scale(1)';
+                }, 200);
+            }
+            
+            alert(`✅ ${productName} added to cart!\nPrice: ${price}\nTotal items: ${cartCount}`);
+        }
+
+        function toggleCart() {
+            alert(`🛒 Shopping Cart\nItems: ${cartCount}\n\nCart feature coming soon!`);
+        }
+
+        function showLogin() {
+            document.getElementById('authModal').classList.add('active');
+            isSignupMode = false;
+            updateAuthModal();
+        }
+
+        function closeModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            isSignupMode = !isSignupMode;
+            updateAuthModal();
+        }
+
+        function updateAuthModal() {
+            const title = document.getElementById('authTitle');
+            const nameGroup = document.getElementById('nameGroup');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const switchText = document.getElementById('switchText');
+            const switchLink = document.getElementById('switchLink');
+
+            if (isSignupMode) {
+                title.textContent = 'Sign Up';
+                nameGroup.style.display = 'block';
+                submitBtn.textContent = 'Sign Up';
+                switchText.textContent = 'Already have an account? ';
+                switchLink.textContent = 'Login';
+            } else {
+                title.textContent = 'Login';
+                nameGroup.style.display = 'none';
+                submitBtn.textContent = 'Login';
+                switchText.textContent = "Don't have an account? ";
+                switchLink.textContent = 'Sign Up';
+            }
+        }
+
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailInput').value;
+            const password = document.getElementById('passwordInput').value;
+            const name = document.getElementById('nameInput').value;
+
+            if (isSignupMode) {
+                if (!name) {
+                    alert('Please enter your name');
+                    return;
+                }
+                currentUser = { name, email };
+                alert('✅ Account created successfully!\nWelcome to Jupiter Fashion House!');
+            } else {
+                currentUser = { name: email.split('@')[0], email };
+                alert('✅ Login successful!\nWelcome back!');
+            }
+
+            isLoggedIn = true;
+            updateUserInterface();
+            closeModal();
+        });
+
+        function updateUserInterface() {
+            const loginBtn = document.getElementById('loginBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const userInitial = document.getElementById('userInitial');
+            const profileName = document.getElementById('profileName');
+            const profileEmail = document.getElementById('profileEmail');
+            const profileAvatar = document.getElementById('profileAvatar');
+
+            if (isLoggedIn && currentUser) {
+                loginBtn.style.display = 'none';
+                profileDropdown.style.display = 'block';
+                
+                const initial = currentUser.name.charAt(0).toUpperCase();
+                userInitial.textContent = initial;
+                profileName.textContent = currentUser.name;
+                profileEmail.textContent = currentUser.email;
+                profileAvatar.textContent = initial;
+            } else {
+                loginBtn.style.display = 'block';
+                profileDropdown.style.display = 'none';
+            }
+        }
+
+        function toggleProfileMenu() {
+            const menu = document.getElementById('profileMenu');
+            menu.classList.toggle('active');
+        }
+
+        function logout() {
+            isLoggedIn = false;
+            currentUser = null;
+            updateUserInterface();
+            showPage('home');
+            alert('👋 Logged out successfully!');
+        }
+
+        function showPage(pageName) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const targetPage = document.getElementById(pageName + 'Page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            const profileMenu = document.getElementById('profileMenu');
+            if (profileMenu) {
+                profileMenu.classList.remove('active');
+            }
+        }
+
+        // Close profile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const profileDropdown = document.getElementById('profileDropdown');
+            const profileMenu = document.getElementById('profileMenu');
+            
+            if (profileDropdown && profileMenu && !profileDropdown.contains(e.target)) {
+                profileMenu.classList.remove('active');
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('authModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
